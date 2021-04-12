@@ -73,7 +73,8 @@
         }
         .num
         {
-            font-size: 20px;
+            font-size: 30px;
+            transition : ease-out 0.5s;
         }
         .type
         {
@@ -106,15 +107,27 @@
             <v-col class="btn" v-for="ans in shuffle(Answers)" :key="ans">
             
             <v-btn @click="checkA(ans)" class="column" type="button"  elevation="4" outlined x-large>{{ans}}</v-btn>
-            </v-col></v-row>
-        <div class="clear"></div>
+            </v-col></v-row><br>
+            <img src="imgs/rustacean-flat-happy.png" id='imageArea'  width="30%" height="30%">
+            
                 
                 <!-- <p>{{Answers}},{{Correct}}</p><p>Id:{{Id}},正解数{{score}},総数{{len}}</p> -->
             </div>
-            <div v-show="show2">
+            <div v-show="show2">    
+                <p class="num">{{num}}問中 {{score}}問正解！</p>
+
+                <div v-show="show3">
+                    <video id="player1" width="100%" height="400px" preload="none" autoplay loop muted >
+                        <source id="video" src="imgs/おばま.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"' poster="imgs/ネロukiuki.jpg" >
+                    </video><br>
+                </div>
+
+                <div v-show="show4">
+                    <img src="imgs/ネロねる.jpg" title="ざんねん">
+                </div>
                 
-                <p class="num">正解数 : {{score}}</p>
-                <v-btn href="/" type="button"  elevation="4" outlined >おしまい ちゃん</v-btn>
+                <v-btn href="/" type="button"  elevation="4" outlined large>おしまい ちゃん</v-btn>
+
             </div>
           </v-main>
         </v-app>
@@ -142,6 +155,8 @@
                         score: 0,
                         show1: true,
                         show2: false,
+                        show3: true,
+                        show4: false,
                         len: 1,
                         loading: false,
                         
@@ -158,7 +173,7 @@
                     created() {                       
                    
                         this.InitializeData();                   
-                    
+                        this.imageMix();
 
                      },
                     
@@ -189,6 +204,14 @@
                                 })
                                 .catch(res => (res));                         
                         },
+                        imageMix(){
+                            const imageArea = document.getElementById('imageArea');
+                            const images = ['imgs/ぷーどる.gif', 'imgs/みにしゅな.gif', 'imgs/こーぎ.gif', 'imgs/shiba.gif', 'imgs/pug.gif'];
+
+                            const imageNo = Math.floor( Math.random() * images.length)
+                            imageArea.src = images[imageNo];
+                        },
+                        
                         
                         shuffle(array){
                              //選択肢のランダム配置
@@ -253,7 +276,15 @@
                             {
                                 this.show1 = false;
                                 this.show2 = true;
+
+                                if(this.score < 2)
+                                {
+                                    this.show3 = false;
+                                    this.show4 = true;
+                                };
+                                
                             }
+                            
                         }    
                     },
                     
